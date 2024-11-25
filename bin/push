@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+pixlet render nyc_subway_zoom.star
+pixlet push $TIDBYT_DEVICE_ID nyc_subway_zoom.webp
