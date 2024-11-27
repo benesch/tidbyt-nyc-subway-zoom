@@ -14,7 +14,7 @@ BULLET_COLOR = "#ee352e"
 # Number of hardcoded iterations to simulate an infinite loop, since Starlark
 # doesn't support infinite loops. Used for decoding protobuf messages and such,
 # which can support an arbitrary number of fields, etc.
-MAX_ITERATIONS = 64
+MAX_ITERATIONS = 2 << 20
 
 # ==> Entrypoint.
 
