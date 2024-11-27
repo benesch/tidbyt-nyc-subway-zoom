@@ -6,7 +6,7 @@ GTFS_FEED_URL = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fg
 
 # The ID of the stop to watch.
 # For the NYC MTA, see: http://web.mta.info/developers/data/nyct/subway/google_transit.zip
-STOP_ID = "123S"
+STOP_ID = b"123S"
 
 # The color of the bullet to use for arrivals.
 BULLET_COLOR = "#ee352e"
@@ -57,7 +57,7 @@ def render_bullet(route):
     return render.Circle(
         color = BULLET_COLOR,
         diameter = 7,
-        child = render.Text(route, font = "tom-thumb"),
+        child = render.Text(str(route), font = "tom-thumb"),
     )
 
 def render_eta(eta):
@@ -89,7 +89,7 @@ STOP_TIME_UPDATE_ARRIVAL_FIELD_NUMBER = 2
 STOP_TIME_EVENT_ARRIVAL_TIME_FIELD_NUMBER = 2
 
 def gtfs_get_feed(url):
-    return http.get(url, ttl_seconds = 5).body()
+    return http.get(url, ttl_seconds = 5).bytes()
 
 def gtfs_get_upcoming_arrivals(stop_id, reader):
     upcoming_arrivals = []
@@ -113,7 +113,6 @@ def gtfs_get_upcoming_arrivals(stop_id, reader):
                 arrival_time = time.from_timestamp(arrival_times[0])
                 if arrival_time > time.now():
                     upcoming_arrivals.append(struct(route_id = route_id, eta = arrival_time))
-
     return sorted(upcoming_arrivals, key = lambda x: x.eta)
 
 # ==> Generic Protobuf decoding.
@@ -178,6 +177,6 @@ def proto_decode_len(reader):
     return out, reader
 
 def proto_next_byte(reader):
-    out = reader.elem_ords()[0]
+    out = ord(reader[0])
     reader = reader[1:]
     return out, reader
